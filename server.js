@@ -27,6 +27,6 @@ app.post("/api/site-visits",async(req,res)=>{try{res.status(201).json(await Site
 app.get("/api/dashboard",async(req,res)=>{try{const [leads,followups,visits]=await Promise.all([Lead.countDocuments(),Followup.countDocuments(),SiteVisit.countDocuments()]);const converted=await Lead.countDocuments({status:"Converted"});res.json({leads,followups,visits,conversionRate:leads?Math.round(converted/leads*100):0})}catch(e){res.status(500).json({error:e.message})}});
 app.post("/api/ai/chat",async(req,res)=>{const m=String(req.body.message||"").toLowerCase();let reply="Thanks for contacting MM DEVELOPERS. Our sales team will help you with project details, pricing and site visits.";if(m.includes("price")||m.includes("cost"))reply="Please share the project name or budget. Our team can provide the latest available pricing.";if(m.includes("visit"))reply="Sure. We can schedule a site visit. Please share your preferred date and time.";res.json({reply})});
 
-app.use(express.static(path.join(__dirname,"../frontend")));
-app.get("*",(req,res)=>res.sendFile(path.join(__dirname,"../frontend/index.html")));
-mongoose.connect(MONGODB_URI||"mongodb://127.0.0.1:27017/mm_developers").then(()=>{app.listen(PORT,()=>console.log("MM DEVELOPERS running on "+PORT))}).catch(e=>{console.error("MongoDB connection failed:",e.message);process.exit(1)});
+app.use(express.static(__dirname));
+app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"index.html")));
+mongoose.connect(MONGODB_URI||"mongodb://127.0.0.1:27017/mm_developers")

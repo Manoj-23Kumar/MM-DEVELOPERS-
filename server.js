@@ -29,4 +29,14 @@ app.post("/api/ai/chat",async(req,res)=>{const m=String(req.body.message||"").to
 
 app.use(express.static(__dirname));
 app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"index.html")));
-mongoose.connect(MONGODB_URI||"mongodb://127.0.0.1:27017/mm_developers")
+app.listen(PORT, () => {
+  console.log(`MM DEVELOPERS running on ${PORT}`);
+});
+
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    console.log("MongoDB connected");
+  })
+  .catch((e) => {
+    console.error("MongoDB connection failed:", e.message);
+  });
